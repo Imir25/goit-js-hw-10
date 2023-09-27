@@ -6,11 +6,13 @@ const breedSelect = document.querySelector('#breed-select');
 const loader = document.querySelector('.loader');
 const catInfo = document.querySelector('.cat-info');
 
-const slim = new SlimSelect(breedSelect, {
+var slim = new SlimSelect({
+  select: '#breed-select',
   placeholder: 'Select a breed',
-  onChange: (values) => {
-    if (values.length > 0) {
-      const breedId = values[0].value; 
+  events: {
+    afterClose: () => {
+    catInfo.innerHTML = '';
+      const breedId = slim.getSelected(); 
       fetchCatByBreed(breedId)
         .then((cat) => renderCat(cat))
         .catch((error) => {
