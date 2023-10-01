@@ -10,20 +10,25 @@ var slim = new SlimSelect({
   select: '#breed-select',
   placeholder: 'Select a breed',
   events: {
-    afterClose: () => {
-    catInfo.innerHTML = '';
+    afterOpen: () => {
+      catInfo.innerHTML = '';
       const breedId = slim.getSelected(); 
+      loader.classList.remove('is-hidden');
+
       fetchCatByBreed(breedId)
-        .then((cat) => renderCat(cat))
+        .then((cat) => {
+          renderCat(cat);
+          loader.classList.add('is-hidden');
+        })
         .catch((error) => {
           Notiflix.Notify.failure('Oops! Something went wrong. Try reloading the page.');
+          loader.classList.add('is-hidden');
         });
     }
   },
 });
 
 window.onload = () => {
-  
   loader.classList.remove('is-hidden');
 
   fetchBreeds()
